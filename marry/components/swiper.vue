@@ -15,7 +15,6 @@
   export default {
     data () {
       return {
-        current: null
       }
     },
     components: {
@@ -31,13 +30,8 @@
         direction: 'vertical'
       })
       swiper.on('slideChangeEnd', () => {
-        this.current = swiper.realIndex
+        this.$store.commit('pageIndex', swiper.realIndex)
       })
-    },
-    watch: {
-      current () {
-        window.app.$emit('current', this.current)
-      }
     }
   }
 </script>

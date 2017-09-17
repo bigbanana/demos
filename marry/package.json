@@ -1,12 +1,13 @@
 {
   "scripts": {
-    "dev": "vue build app.vue",
-    "build": "vue build app.vue --prod --lib"
+    "dev": "vue build -c build/config.js",
+    "build": "vue build --prod --lib -c build/config.js"
   },
   "dependencies": {
     "gsap": "^1.20.2",
     "swiper": "^4.0.0-beta.3",
-    "vue": "^2.4.4"
+    "vue": "^2.4.4",
+    "vuex": "^2.4.0"
   },
   "devDependencies": {
     "less": "^2.7.2",
