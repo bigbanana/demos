@@ -8,7 +8,7 @@ import re
 import os
 from pprint import pprint
 
-DIR_PATH = "C:\\Users\\Administrator\\www\\demos\\xitie"
+DIR_PATH = "C:\\Users\\Administrator\\www\\qinjian"
 class Handler(BaseHandler):
   crawl_config = {
     'headers': {
@@ -22,39 +22,41 @@ class Handler(BaseHandler):
   @every(minutes=24 * 60)
   def on_start(self):
     self.crawl('http://www.yaoyue365.com/wedding.html?page=1', callback=self.index_page)
+    self.crawl('http://www.yaoyue365.com/business.html?page=1', callback=self.index_page)
+    self.crawl('http://www.yaoyue365.com/person.html?page=1', callback=self.index_page)
 
   @config(age=10)
   def index_page(self, response):
-    pid = 1
     for index, each in enumerate(response.doc('.cy-mouse').items()):
-      # if index>0 :
-      #   break
-      pid += 1
-      self.crawl(each.attr('data-url'), callback=self.detail_page, save={"id": pid})
+      if index>0 :
+        break
+      self.crawl(each.attr('data-url'), callback=self.detail_page)
+
+    for page in response.doc('.pagination li a').items():
+      self.crawl(page.attr('href'), callback=self.index_page)
 
   @config(age=10)
   def detail_page(self, response):
     # pprint (vars(response))
-    pa = re.compile('(?<="src":")[^"]*', re.S)
-    imgs = re.findall(pa, response.text)
-    for img in imgs:
+    pa = re.compile(r'((?<=["\']))http:.*?\.(?:jpg|png|gif|jpeg|mp3|svg)(?=\1)')
+
+    img_res = pa.finditer(response.text)
+    pid = re.search(re.compile('[^\/]+$'),response.url).group(0)
+    for img_r in img_res:
+      img = img_r.group()
       if img != '' and len(img) < 200:
-        img = img.replace('\\','').replace('yaoyue365','skxtay')
-        # print(img)
-        self.crawl(img, callback=self.save_img, save={"name": 'tpl'+str(response.save['id'])})
+        img = img.replace('\\','')
+        self.crawl(img, callback=self.save_img)
     return {
-      "id": response.save['id'],
+      "pid": pid,
       "url": response.url,
       "content": response.text,
     }
 
   def save_img(self, response):
-    pa = re.compile('(?<=\/)[^\/]*(?=$)')
-    file_name = re.search(pa,response.url).group(0)
-    path = response.save["name"]
-    file_path = path + os.path.sep + file_name
+    file_name = response.url.replace('http://res.yaoyue365.com/','')
     content = response.content
-    self.tool.save_img(content, file_path)
+    self.tool.save_img(content, file_name)
 
 #工具类
 class Tool:
