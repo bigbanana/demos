@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="./lib/jquery.js"></script>
+</head>
+
+<body>
+<!--     <section :class="'swiper-slide swiper-slide'+k">
+        <div class="pagebg" :style="setBgStyle(page.pagebg)" style="width:100%;height:100%;background:#fff;z-index:-888;"></div>
+        <div v-for="(ev,key) in page.elements" :index="key" class="item" :class=" k == current ? 'showpage':'nopage'" :style="showoutstyle(ev)">
+            <div class="amious" :style="showanim(ev.anim)" style="overflow:hidden;">
+                <div v-if="(ev.type==2 || ev.type==5)" class="el-text" :style="showstyle(ev.in.css)" v-html="showcontent(ev.content)"></div>
+                <img v-if="ev.type==4" class="el-bgimg" :style="showimgstyle(ev.in.css)" :src="showimg(ev.src,ev.in.css.width)" @click="picClick(ev.in.properties)" />
+                <div v-if="ev.type=='h'" :class="'svg'+key+'_'+k" data-flag="0" class="el-shape" :style="showstyle(ev.in.css)" v-html="showshape(ev,key+'_'+k)"></div>
+                <count-down v-if="ev.type=='countDown'" class="countDown-text" :style="showstyle(ev.in.css)" :start-time="startTime" :end-time="parseInt(ev.in.properties.deadlineTime)"></count-down>
+                <div v-if="ev.type==='m'" style="width:100%;height:100%;position:relative">
+                  <img :src="'http://api.map.baidu.com/staticimage/v2?ak=WtfAdHwd1tMOCf2dzdRIhNZkSq8V7o5W&width='+(ev.out.css.width*bili1)+'&height='+(ev.out.css.height*bili2)+'&dpiType=ph&markers='+ev.in.properties.lng+','+ev.in.properties.lat+'&markerStyles=l,,0xff0000&center='+ev.in.properties.lng+','+ev.in.properties.lat+'&labels='+ev.in.properties.lng+','+ev.in.properties.lat+'&zoom=17&labelStyles=我在这,1,'+(28*bili1)+',0xffffff,0x1abd9b,1'" />
+                  <a style="width:80px;height:30px;line-height:30px;background:#1abd9b;position:absolute;right:10px;bottom:10px;color:#fff;text-align:center;border-radius:3px" @click="goLocation(ev.in.properties)">导 航</a>
+                </div>
+                <a v-if="ev.type=='phoneCallButton'" :style="showastyle(ev.in.css)" style="display:block;text-align: center" :href="'tel://'+ev.in.properties.tel">
+                  <i class="fa fa-phone"></i>&nbsp;&nbsp;<span>{{ev.content}}</span>
+                </a>
+                <a v-if="ev.type=='linkButton'" :style="showastyle(ev.in.css)" style="display:block;text-align: center" :href="showHref(ev.in.properties.url)">
+                  <i class="fa fa-link"></i>&nbsp;&nbsp;<span>{{ev.content}}</span>
+                </a>
+                <div :id="'zan'+ev.in.properties.id" v-if="ev.type=='interActionButton'" :style="showstyle(ev.in.css)" :class="getzannum(ev.in.properties.id,ev.content)" data-flag="0" style="cursor:pointer" @click="submitZan(ev,page)">
+                  <i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<span>点赞</span>
+                </div>
+                <div v-if="ev.type=='i'" style="position:relative;line-height: 36px;" class="inputs">
+                    <input :id="ev.id" :data-flag="ev.in.properties.require" :style="showform(ev.in.css)" style="position:absolute" v-on:focus="inputfocus" v-on:blur="inputblur">
+                    <span style="position: relative;pointer-events: none; opacity: 0.7;padding-left:20px;">{{ ev.in.properties.placeholder }}</span>
+                    <span v-show=" ev.in.properties.require==true " style="position: relative;pointer-events: none; color:red;">*</span>
+                </div>
+                <div v-if="ev.type=='s'" :style="showform(ev.in.css)" style="padding:0 20px" @click="submitForm(page.id,page.sceneid,ev,$event)"> {{ev.in.properties.str}}</div>
+            </div>
+        </div>
+    </section>
+ -->    <script>
+    var pages
+    var init = $.Deferred()
+    $.ajax({
+        url: 'data.php',
+        dataType: 'json'
+    }).done(function(res) {
+        var pages = res.map(function(item) {
+            var _data = $.parseJSON(item.result)
+            var data
+            data = _data.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
+            return {
+                id: _data.pid,
+                list: $.parseJSON(data)
+            }
+        })
+        init.resolve(pages)
+    })
+
+    init.done(function(pages) {
+        window.pages = pages
+        var page = pages[0]
+        $body = $(document.body)
+        return false
+        page.list.forEach(function(item) {
+            var $page = $('<div class="page">')
+            $body.append($page)
+            item.elements.forEach(function(it) {
+                if (it.type == 4) {
+                    var filename = it.src.match(/[^\/]+\.\w+$/)
+                    if (filename) {
+                        $page.append($('<img src="/demos/xitie/assets/tpl' + page.id + '/' + filename[0] + '">'))
+                    }
+                }
+            })
+        })
+    })
+
+    function getTypeOfID(type){
+      var res = []
+      pages.forEach(function(page){
+        page.list.forEach(function(item){
+          item.elements.forEach(function(it){
+            if(it.type == type){
+              res.push(it)
+            }
+          })
+        })
+      })
+      return res
+    }
+
+    function getElementOfCss(css, val){
+      var res = []
+      pages.forEach(function(page){
+        page.list.forEach(function(item){
+          item.elements.forEach(function(it){
+            if(it.in.css[css] == val){
+              res.push(item)
+              res.push(it)
+            }
+          })
+        })
+      })
+      return res
+    }
+
+    </script>
+</body>
+
+</html>

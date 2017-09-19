@@ -3,7 +3,7 @@
   {
     function __construct()
     {
-      $this->open('./data/result.db');
+      $this->open('../data/result.db');
     }
   }
 
@@ -17,6 +17,6 @@
     $res[] = $r;
   }
   $db->close();
-  echo json_encode($res);
+  echo json_encode($res[0]);
 
 ?>

@@ -1,27 +1,23 @@
 <template>
   <div class="swiper-container">
-    <pages></pages>
+    <div class="swiper-wrapper">
+      <!-- <page :data="page" v-for="page in pages"></page> -->
+    </div>
   </div>
 </template>
 
 <script>
   import swiperCss from 'swiper/dist/css/swiper.css'
   import Swiper from 'swiper/dist/js/swiper'
-  var pages = []
-  var context = require.context("@/pages", true, /\.vue$/)
-  context.keys().forEach(key => {
-    pages.push(context(key))
-  })
   export default {
     data () {
       return {
       }
     },
-    components: {
-      pages: {
-        render (createElement) {
-          return createElement('div', {'class': 'swiper-wrapper'}, pages.map(page => createElement(page)))
-        }
+    computed: {
+      pages () {
+        debugger
+        return this.$store.state.pages
       }
     },
     mounted () {

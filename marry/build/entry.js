@@ -1,19 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import $ from 'jquery'
+import storeConfig from '@/lib/store'
 import App from '@/app'
+
+window.Vue = Vue
+window.Vuex = Vuex
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-  state: {
-    pageIndex: 0
-  },
-  mutations: {
-    pageIndex (state, payload) {
-      state.pageIndex = payload
-    }
-  }
-})
+window.store = new Vuex.Store(storeConfig)
 
 new Vue({
   el: '#app',
