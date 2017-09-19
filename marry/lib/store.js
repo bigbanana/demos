@@ -6,12 +6,18 @@
 
 var config = {
   state: {
+    inited: false,
     source: '/api/data.php',
     pageIndex: 0,
-    pages: []
+    pages: [],
+    Xpro: 1,
+    Ypro: 1
   },
   mutations: {
     init (state, payload) {
+      state.Xpro = document.documentElement.clientWidth/640
+      state.Ypro = document.documentElement.clientHeight/1008
+      state.inited = true
       state.pages = payload.pages
     },
     pageIndex (state, payload) {

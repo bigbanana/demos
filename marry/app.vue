@@ -1,9 +1,7 @@
-<template><swiper ref="swiper"></swiper></template>
+<template><swiper v-if="$store.state.inited" ref="swiper"></swiper></template>
 <script>
-import Vue from 'vue'
   var components = require.context("@/components", true, /\.vue$/)
   components.keys().forEach(key => {
-    // console.log(Vue == window.Vue)
     Vue.component(key.match(/([^/]+)\.vue$/)[1], components(key))
   })
   export default {
@@ -18,7 +16,6 @@ import Vue from 'vue'
       window.onresize = () => {
         this.resetViewport()
       }
-      // document.documentElement.style.fontSize = window.screen.width*16/414+'px'
     },
     created () {
       this.init()

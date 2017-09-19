@@ -8,7 +8,7 @@ import re
 import os
 from pprint import pprint
 
-DIR_PATH = "C:\\Users\\Administrator\\www\\demos\\xitie"
+DIR_PATH = "C:\\Users\\Administrator\\www\\demos\\marry"
 class Handler(BaseHandler):
   crawl_config = {
     'headers': {

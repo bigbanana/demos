@@ -1,7 +1,9 @@
 <template>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <!-- <page :data="page" v-for="page in pages"></page> -->
+      <div v-for="page in pages" class="swiper-slide">
+        <page :data="page"></page>
+      </div>
     </div>
   </div>
 </template>
@@ -16,18 +18,22 @@
     },
     computed: {
       pages () {
-        debugger
         return this.$store.state.pages
       }
     },
     mounted () {
-      this.current = 0
-      var swiper = new Swiper('.swiper-container', {
-        direction: 'vertical'
-      })
-      swiper.on('slideChangeEnd', () => {
-        this.$store.commit('pageIndex', swiper.realIndex)
-      })
+      this.createSwiper()
+    },
+    methods: {
+      createSwiper () {
+        window.swiper = new Swiper('.swiper-container', {
+          direction: 'vertical'
+        })
+        swiper.on('slideChangeEnd', () => {
+          this.$store.commit('pageIndex', swiper.realIndex)
+        })
+
+      }
     }
   }
 </script>

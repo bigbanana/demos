@@ -10,9 +10,10 @@ module.exports = {
     webpackConfig.resolve.alias['@'] = process.cwd()
     if(!options.production){
       webpackConfig.resolve.alias['jquery'] = 'jquery/src/jquery.js'
+      webpackConfig.resolve.alias['vue'] = 'vue/dist/vue.esm.js'
       webpackConfig.plugins.push(new webpack.ProvidePlugin({
         $: 'jquery',
-        // Vue: ['vue/dist/vue.esm.js', 'default']
+        Vue: ['vue/dist/vue.esm.js', 'default']
       }))
       return webpackConfig
     }
