@@ -8,7 +8,7 @@ import re
 import os
 from pprint import pprint
 
-DIR_PATH = "C:\\Users\\Administrator\\www\\qinjian"
+DIR_PATH = "C:\\Users\\Administrator\\www\\demos\\xitie"
 class Handler(BaseHandler):
   crawl_config = {
     'headers': {
@@ -21,21 +21,21 @@ class Handler(BaseHandler):
 
   @every(minutes=24 * 60)
   def on_start(self):
-    self.crawl('http://www.yaoyue365.com/wedding.html?page=1', callback=self.index_page)
-    self.crawl('http://www.yaoyue365.com/business.html?page=1', callback=self.index_page)
-    self.crawl('http://www.yaoyue365.com/person.html?page=1', callback=self.index_page)
+    self.crawl('http://www.yaoyue365.com/v/CYAQVdL9QwW1', callback=self.detail_page)
+    # self.crawl('http://www.yaoyue365.com/wedding.html?page=1', callback=self.index_page)
+    # self.crawl('http://www.yaoyue365.com/business.html?page=1', callback=self.index_page)
+    # self.crawl('http://www.yaoyue365.com/person.html?page=1', callback=self.index_page)
 
   @config(age=10)
   def index_page(self, response):
     for index, each in enumerate(response.doc('.cy-mouse').items()):
-      if index>0 :
-        break
+      # if index>0 :
+      #   break
       self.crawl(each.attr('data-url'), callback=self.detail_page)
 
     for page in response.doc('.pagination li a').items():
       self.crawl(page.attr('href'), callback=self.index_page)
 
-  @config(age=10)
   def detail_page(self, response):
     # pprint (vars(response))
     pa = re.compile(r'((?<=["\']))http:.*?\.(?:jpg|png|gif|jpeg|mp3|svg)(?=\1)')
