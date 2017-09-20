@@ -8,7 +8,7 @@ var config = {
   state: {
     inited: false,
     source: '/api/data.php',
-    pageIndex: 0,
+    pageIndex: 10,
     pages: [],
     Xpro: 1,
     Ypro: 1

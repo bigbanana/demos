@@ -1,8 +1,8 @@
 <template>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div v-for="page in pages" class="swiper-slide">
-        <page :data="page"></page>
+      <div v-for="(page, index) in pages" class="swiper-slide">
+        <page :data="page" :index="index"></page>
       </div>
     </div>
   </div>
@@ -19,6 +19,9 @@
     computed: {
       pages () {
         return this.$store.state.pages
+      },
+      pageIndex () {
+        return this.$store.state.pageIndex
       }
     },
     mounted () {
@@ -26,13 +29,19 @@
     },
     methods: {
       createSwiper () {
+        var $slides = $(this.$el).find('.swiper-slide')
         window.swiper = new Swiper('.swiper-container', {
-          direction: 'vertical'
+          direction: 'vertical',
+          // effect: 'flip'
         })
         swiper.on('slideChangeEnd', () => {
-          this.$store.commit('pageIndex', swiper.realIndex)
+          $slides.eq(this.pageIndex).siblings().removeClass('active')
         })
-
+        swiper.on('slideChangeStart', () => {
+          this.$store.commit('pageIndex', swiper.realIndex)
+          $slides.eq(this.pageIndex).addClass('active')
+        })
+        swiper.slideTo(this.pageIndex)
       }
     }
   }
@@ -48,14 +57,20 @@
       height: 100%;
       position: relative;
       background-color: #fafafa;
-      position: relative;
+      &.active,&.swiper-slide-active{
+        .item{
+          display: block;
+        }
+      }
     }
     .item{
       position: absolute;
-    }
-    .text{
-      position: absolute; z-index: 10; top: 0; left: 0; width: 100%; text-align: center;
-      color: #fff; font-size: 100px; line-height: 300px;
+      display: none;
+      .content{
+        margin: 0; display: inline-block; vertical-align: top;
+        width: 100%; height: 100%;
+        box-sizing: border-box;
+      }
     }
   }
 </style>

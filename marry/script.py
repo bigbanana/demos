@@ -21,12 +21,11 @@ class Handler(BaseHandler):
 
   @every(minutes=24 * 60)
   def on_start(self):
-    self.crawl('http://www.yaoyue365.com/v/CYAQVdL9QwW1', callback=self.detail_page)
+    self.crawl('http://www.yaoyue365.com/static/css/style2.css', callback=self.detail_page)
     # self.crawl('http://www.yaoyue365.com/wedding.html?page=1', callback=self.index_page)
     # self.crawl('http://www.yaoyue365.com/business.html?page=1', callback=self.index_page)
     # self.crawl('http://www.yaoyue365.com/person.html?page=1', callback=self.index_page)
 
-  @config(age=10)
   def index_page(self, response):
     for index, each in enumerate(response.doc('.cy-mouse').items()):
       # if index>0 :
@@ -38,7 +37,7 @@ class Handler(BaseHandler):
 
   def detail_page(self, response):
     # pprint (vars(response))
-    pa = re.compile(r'((?<=["\']))http:.*?\.(?:jpg|png|gif|jpeg|mp3|svg)(?=\1)')
+    pa = re.compile(r'((?<=["\']))http:.*?\.(?:jpg|png|gif|jpeg|mp3|svg|ttf)(?=\1)')
 
     img_res = pa.finditer(response.text)
     pid = re.search(re.compile('[^\/]+$'),response.url).group(0)

@@ -17,6 +17,7 @@
     $res[] = $r;
   }
   $db->close();
+  $res[0]['result'] = json_decode($res[0]['result']);
   echo json_encode($res[0]);
 
 ?>

@@ -1,7 +1,7 @@
 var path = require('path')
 
 var cwd = process.cwd()
-var proxy = cwd.replace(/^.*?www/,'http://localhost').replace(/\\/g,'/') + '/api'
+var proxyRoot = cwd.replace(/^.*?www/,'http://localhost').replace(/\\/g,'/')
 module.exports = {
   entry: {
     client: [path.resolve(process.cwd(), 'build/entry.js')]
@@ -61,5 +61,9 @@ module.exports = {
     }))
     return webpackConfig
   },
-  proxy: proxy
+  proxy: {
+    '/api': proxyRoot + '/api',
+    '/assets': proxyRoot + '/assets',
+    '/lib': proxyRoot + '/lib'
+  }
 }

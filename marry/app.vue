@@ -1,5 +1,6 @@
 <template><swiper v-if="$store.state.inited" ref="swiper"></swiper></template>
 <script>
+  import style from '@/lib/app.less'
   var components = require.context("@/components", true, /\.vue$/)
   components.keys().forEach(key => {
     Vue.component(key.match(/([^/]+)\.vue$/)[1], components(key))
@@ -23,11 +24,10 @@
     methods: {
       init () {
         $.getJSON(this.$store.state.source).done(res => {
-          var _data = $.parseJSON(res.result)
           var data
-          data = _data.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
+          data = res.result.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
           this.$store.commit('init', {
-            id: _data.pid,
+            id: res.result.pid,
             pages: $.parseJSON(data)
           })
         })
