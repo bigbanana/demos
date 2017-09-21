@@ -1,6 +1,15 @@
-<template><swiper v-if="$store.state.inited" ref="swiper"></swiper></template>
+<template>
+  <div class="app">
+    <swiper v-if="inited" ref="swiper"></swiper>
+  </div>
+</template>
 <script>
   import style from '@/lib/app.less'
+  import store from '@/lib/store'
+  import AES from 'crypto-js/aes'
+  import Base64 from 'crypto-js/enc-base64'
+  window.AES = AES
+  window.Base64 = Base64
   var components = require.context("@/components", true, /\.vue$/)
   components.keys().forEach(key => {
     Vue.component(key.match(/([^/]+)\.vue$/)[1], components(key))
@@ -21,13 +30,21 @@
     created () {
       this.init()
     },
+    computed: {
+      inited () {
+        return store.state.inited
+      }
+    },
     methods: {
       init () {
-        $.getJSON(this.$store.state.source).done(res => {
+        $.getJSON(store.state.source).done(res => {
           var data
+          var $root = $(this.$el)
           data = res.result.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
-          this.$store.commit('init', {
+          store.commit('init', {
             id: res.result.pid,
+            width: $root.width(),
+            height: $root.height(),
             pages: $.parseJSON(data)
           })
         })
@@ -55,5 +72,8 @@
   }
   body{
     margin: 0;
+  }
+  .app{
+    height: 100%;
   }
 </style>

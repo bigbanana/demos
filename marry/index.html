@@ -3,12 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>Document</title>
     <script src="./lib/jquery.js"></script>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vuex.js"></script>
+    <script src="./dist/app.js"></script>
 </head>
 
 <body>
-<!--     <section :class="'swiper-slide swiper-slide'+k">
+  <div id="app"></div>
+<!--
+      <section :class="'swiper-slide swiper-slide'+k">
         <div class="pagebg" :style="setBgStyle(page.pagebg)" style="width:100%;height:100%;background:#fff;z-index:-888;"></div>
         <div v-for="(ev,key) in page.elements" :index="key" class="item" :class=" k == current ? 'showpage':'nopage'" :style="showoutstyle(ev)">
             <div class="amious" :style="showanim(ev.anim)" style="overflow:hidden;">
@@ -37,75 +43,11 @@
                 <div v-if="ev.type=='s'" :style="showform(ev.in.css)" style="padding:0 20px" @click="submitForm(page.id,page.sceneid,ev,$event)"> {{ev.in.properties.str}}</div>
             </div>
         </div>
-    </section>
- -->    <script>
-    var pages
-    var init = $.Deferred()
-    $.ajax({
-        url: 'data.php',
-        dataType: 'json'
-    }).done(function(res) {
-        var pages = res.map(function(item) {
-            var _data = $.parseJSON(item.result)
-            var data
-            data = _data.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
-            return {
-                id: _data.pid,
-                list: $.parseJSON(data)
-            }
-        })
-        init.resolve(pages)
-    })
-
-    init.done(function(pages) {
-        window.pages = pages
-        var page = pages[0]
-        $body = $(document.body)
-        return false
-        page.list.forEach(function(item) {
-            var $page = $('<div class="page">')
-            $body.append($page)
-            item.elements.forEach(function(it) {
-                if (it.type == 4) {
-                    var filename = it.src.match(/[^\/]+\.\w+$/)
-                    if (filename) {
-                        $page.append($('<img src="/demos/xitie/assets/tpl' + page.id + '/' + filename[0] + '">'))
-                    }
-                }
-            })
-        })
-    })
-
-    function getTypeOfID(type){
-      var res = []
-      pages.forEach(function(page){
-        page.list.forEach(function(item){
-          item.elements.forEach(function(it){
-            if(it.type == type){
-              res.push(it)
-            }
-          })
-        })
-      })
-      return res
-    }
-
-    function getElementOfCss(css, val){
-      var res = []
-      pages.forEach(function(page){
-        page.list.forEach(function(item){
-          item.elements.forEach(function(it){
-            if(it.in.css[css] == val){
-              res.push(item)
-              res.push(it)
-            }
-          })
-        })
-      })
-      return res
-    }
-
-    </script>
+      </section>
+ -->
+ <script>
+   new Vue({el: '#app', render: function(c){return c(app)}})
+ </script>
 </body>
 
 </html>

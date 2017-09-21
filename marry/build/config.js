@@ -1,4 +1,5 @@
 var path = require('path')
+var JavaScriptObfuscator = require('webpack-obfuscator')
 
 var cwd = process.cwd()
 var proxyRoot = cwd.replace(/^.*?www/,'http://localhost').replace(/\\/g,'/')
@@ -13,7 +14,8 @@ module.exports = {
       webpackConfig.resolve.alias['vue'] = 'vue/dist/vue.esm.js'
       webpackConfig.plugins.push(new webpack.ProvidePlugin({
         $: 'jquery',
-        Vue: ['vue/dist/vue.esm.js', 'default']
+        Vue: ['vue/dist/vue.esm.js', 'default'],
+        Vuex: ['vuex/dist/vuex.esm.js', 'default'],
       }))
       return webpackConfig
     }
@@ -58,6 +60,10 @@ module.exports = {
       output: {
         comments: false
       }
+    }))
+    //代码加密
+    webpackConfig.plugins.push(new JavaScriptObfuscator({
+      rotateUnicodeArray: true
     }))
     return webpackConfig
   },
