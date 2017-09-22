@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <list></list>
-    <app id="view"></app>
+    <edit></edit>
     <layer></layer>
     <prop></prop>
   </div>
@@ -9,7 +9,9 @@
 
 <script>
   import App from '@/app'
-  import store from '@/lib/store'
+  import store from '@/lib/estore'
+  import VueDraggableResizable from 'vue-draggable-resizable/src'
+  Vue.component('vdr', VueDraggableResizable)
 
   export default {
     data () {
@@ -25,31 +27,27 @@
   @import '~@/lib/edit.less';
 
   ::-webkit-scrollbar {
-       width: 10px;
-       height: 10px;
-   }
-   ::-webkit-scrollbar-track {
-       background: @pchh;
-   }
-   ::-webkit-scrollbar-track:hover {
-       background: @pchh;
-   }
-   ::-webkit-scrollbar-thumb {
-       background: @pch;
-   }
-   ::-webkit-scrollbar-thumb:hover {
-       background: @pchh;
-   }
-   ::-webkit-scrollbar-thumb:active {
-       background: @pchh;
-   }
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: @pchh;
+  }
+  ::-webkit-scrollbar-track:hover {
+    background: @pchh;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: @pch;
+  }
+  // ::-webkit-scrollbar-thumb:hover {
+  // }
 
   #main{
     height: 100%;
+    background-color: @pcd;
+    overflow:hidden;
   }
-  #view{
-    width: 414px;
-    height: 736px;
-    position: absolute; left: 50%; top: 50%; margin: -368px 0 0 -212px;
+  body{
+    overflow:hidden;
   }
 </style>

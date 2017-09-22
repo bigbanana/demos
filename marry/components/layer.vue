@@ -1,6 +1,6 @@
 <template>
   <div id="layer">
-    <div v-for="item in layers" class="layer">
+    <div v-for="(item, index) in layers" class="layer" @click="handleLayerIndex(index)">
       <div class="layer-img" :style="size">
         <item :data="item" :animation="false"></item>
       </div>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import store from '@/lib/store'
+  import store from '@/lib/estore'
 
   export default {
     data () {
@@ -26,7 +26,12 @@
       layers () {
         var page = store.state.pages[store.state.pageIndex]
         if(!page) return []
-        return page.elements
+        return page.nodes
+      }
+    },
+    methods: {
+      handleLayerIndex (index) {
+        store.commit('layerIndex', index)
       }
     }
   }

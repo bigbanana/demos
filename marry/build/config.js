@@ -14,6 +14,7 @@ module.exports = {
       webpackConfig.resolve.alias['vue'] = 'vue/dist/vue.esm.js'
       webpackConfig.plugins.push(new webpack.ProvidePlugin({
         $: 'jquery',
+        _: 'lodash',
         Vue: ['vue/dist/vue.esm.js', 'default'],
         Vuex: ['vuex/dist/vuex.esm.js', 'default'],
       }))

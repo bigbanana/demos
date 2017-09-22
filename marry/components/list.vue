@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import store from '@/lib/store'
+  import store from '@/lib/estore'
 
   export default {
     data () {

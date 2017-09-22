@@ -27,28 +27,12 @@
         this.resetViewport()
       }
     },
-    created () {
-      this.init()
-    },
     computed: {
       inited () {
         return store.state.inited
       }
     },
     methods: {
-      init () {
-        $.getJSON(store.state.source).done(res => {
-          var data
-          var $root = $(this.$el)
-          data = res.result.content.match(/pagelists:\s*.*?(?=,\n)/)[0].replace(/pagelists:\s*/, '')
-          store.commit('init', {
-            id: res.result.pid,
-            width: $root.width(),
-            height: $root.height(),
-            pages: $.parseJSON(data)
-          })
-        })
-      },
       resetViewport () {
         var width = window.screen.width
         var scale = width/414

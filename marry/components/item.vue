@@ -1,14 +1,3 @@
-<template>
-  <div class="item" :style="outStyle(data)">
-    <img v-if="data.type == 4" class="content" :style="inStyle(data)" :src="data.src | img">
-    <pre v-if="data.type == 2" class="content" :style="inStyle(data)" v-html="data.content"></pre>
-    <input v-if="data.type == 'i'" class="content" :style="inStyle(data)" :placeholder="data.in.properties.placeholder" >
-    <button v-if="data.type == 's'" class="content" :style="inStyle(data)">{{ data.in.properties.str }}</button>
-    <a v-if="data.type == 'phoneCallButton'" class="content" :style="inStyle(data)" :href="'tel://'+data.in.properties.tel">{{ data.content }}</a>
-    <xsvg v-if="data.type == 'h'" class="content" :style="inStyle(data)" :src="data.src | img"></xsvg>
-    <img v-if="data.type == 'm'" class="content" :style="inStyle(data)" :src="'http://api.map.baidu.com/staticimage/v2?ak=WtfAdHwd1tMOCf2dzdRIhNZkSq8V7o5W&width='+data.out.css.width*xpro+'&height='+(data.out.css.height*ypro)+'&dpiType=ph&markers='+data.in.properties.lng+','+data.in.properties.lat+'&markerStyles=l,,0xff0000&center='+data.in.properties.lng+','+data.in.properties.lat+'&labels='+data.in.properties.lng+','+data.in.properties.lat+'&zoom=17&labelStyles=我在这,1,'+(28*xpro)+',0xffffff,0x1abd9b,1'" />
-  </div>
-</template>
 <script>
   import store from '@/lib/store'
 
@@ -20,15 +9,42 @@
         default: true
       }
     },
+    render (c) {
+      var opt = {
+        class: 'content',
+        style: this.xstyle,
+        attrs: {},
+        domProps: {}
+      }
+      if(this.data.attributes.name){
+        opt.attrs.name = this.data.attributes.name
+      }
+      if(this.data.nodeName == 'img'){
+        opt.attrs.src = this.data.attributes.src
+      }
+      if(this.data.nodeName == 'input'){
+        opt.attrs.placeholder = this.data.attributes.placeholder
+      }
+      if(/pre|button/.test(this.data.nodeName)){
+        opt.domProps.innerText = this.data.innerText
+      }
+      return c(this.data.nodeName, opt)
+    },
     data () {
       return {}
     },
     computed: {
-      xpro () {
-        return store.state.Xpro
-      },
-      ypro () {
-        return store.state.Ypro
+      xstyle () {
+        return _.reduce(this.data.attributes.style, (res, value, key) => {
+          if(/borderRadius|fontSize|borderWidth|padding/.test(key)){
+            res[key] = parseInt(value)*store.state.xpro+'px'
+          }else if(/height|width|top|left|transform/.test(key)){
+            // res[key] = parseInt(value)*store.state.ypro+'px'
+          }else{
+            res[key] = value
+          }
+          return res
+        }, {})
       }
     },
     filters: {
@@ -40,14 +56,6 @@
       style (item) {
         var css = Object.assign({}, item.in.css, item.out.css)
         var res = Object.keys(css).reduce((res, it) => {
-          if(/(borderRadius|width|left|fontSize|borderWidth|padding)/.test(it)){
-            res[it] = parseInt(css[it])*this.xpro+'px'
-          }else if(/(height|top)/.test(it)){
-            res[it] = parseInt(css[it])*this.ypro+'px'
-          }else{
-            res[it] = css[it]
-          }
-          return res
         }, {})
         return res
       },
@@ -87,12 +95,9 @@
 </script>
 
 <style lang="less" scoped>
-  .item{
-    position: absolute;
-    .content{
-      margin: 0; display: inline-block; vertical-align: top;
-      width: 100%; height: 100%;
-      box-sizing: border-box;
-    }
+  .content{
+    margin: 0; display: inline-block; vertical-align: top;
+    width: 100%; height: 100%;
+    box-sizing: border-box;
   }
 </style>

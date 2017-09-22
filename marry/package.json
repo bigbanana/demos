@@ -7,8 +7,10 @@
     "crypto-js": "^3.1.9-1",
     "gsap": "^1.20.2",
     "jquery": "^1.12.4",
+    "lodash": "^4.17.4",
     "swiper": "^4.0.0-beta.3",
     "vue": "^2.4.4",
+    "vue-draggable-resizable": "^1.5.0",
     "vuex": "^2.4.0"
   },
   "devDependencies": {
